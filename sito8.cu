@@ -141,9 +141,7 @@ int main(int argc, char *argv[])
   while (fgets(BUFFOR,BUFSIZE-1,stdin)) { 
      // if (eigensymmatrix(BUFFOR)) 
     //printf("Main:%s",BUFFOR);
-  printf("1%s\n",BUFFOR);
 	BUFFOR[glen]='\0';
-  printf("2%s\n",BUFFOR);
 	cudaMemcpy(cuda_bufor,BUFFOR,BUFSIZE,cudaMemcpyHostToDevice);
     test<<<1,1>>>(cuda_bufor);
     cudaDeviceSynchronize();	
