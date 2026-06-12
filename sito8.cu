@@ -5,11 +5,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define BUFSIZE 1024
+#define BUFSIZE 2048
+#define BUFSIZE1 2048
 #define NMAX 20
 
-__global__ void test(char * BUFFOR) {
-  
+__global__ void test(char * BUFFOR,int len) {
+  int tid = threadIdx.x;
+  /*for (int j = 0;j<len;j++){
+      BUFFOR[j]=BUFFOR1[j+tid*len]
+    }*/
+  //char * BUFFOR=BUFOR1
   int i,j,k,k3,k4,L,L1,z;
   double /* lambda, */ eps,g,h,ma,mn,norm,s,t,u,w;
   int cond;
@@ -21,7 +26,7 @@ __global__ void test(char * BUFFOR) {
   bit = 32;
   poz = 1;
   poz2 = 1;
-  n = BUFFOR[0] - 63;
+  n = BUFFOR[tid*len] - 63;
   a[0] = 0.0;
   for (i = 0; i < n; i++)
    for (j = 0; j<=i; j++)
@@ -29,7 +34,7 @@ __global__ void test(char * BUFFOR) {
 	  if (i==j) {a[poz2++] = 0; }
 	  else {
         if (bit == 0) { bit = 32;  poz++; }
-        if ((BUFFOR[poz] - 63) & bit)
+        if ((BUFFOR[poz+tid*len] - 63) & bit)
                 { a[poz2++] = 1; }
                else
                 { a[poz2++] = 0; }
@@ -131,20 +136,29 @@ __global__ void test(char * BUFFOR) {
 int main(int argc, char *argv[])
 {
   char BUFFOR[BUFSIZE];
+  char BUFFOR1[BUFSIZE1];
   char * cuda_bufor;
   int glen = 2; 
   
   if (argc>1) {glen=strtol(argv[1],NULL,10);}  
   
-  
-  cudaMalloc((void**)&cuda_bufor,BUFSIZE);
-  while (fgets(BUFFOR,BUFSIZE-1,stdin)) { 
+  int i = 0;
+  cudaMalloc((void**)&cuda_bufor,BUFSIZE1);
+  while (fgets(BUFFOR,BUFSIZE-1,stdin) && i<32) {
+    len = strlen(BUFFOR);
+    for (int j = 0;j<len;j++){
+      BUFFOR1[i*len+j]=BUFFOR[j]
+    }
+    i+=1;
      // if (eigensymmatrix(BUFFOR)) 
     //printf("Main:%s",BUFFOR);
-	BUFFOR[glen]='\0';
-	cudaMemcpy(cuda_bufor,BUFFOR,BUFSIZE,cudaMemcpyHostToDevice);
-    test<<<1,1>>>(cuda_bufor);
+	//BUFFOR[glen]='\0';
+  if (i==32){
+	  cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice);
+    test<<<1,32>>>(cuda_bufor,len);
     cudaDeviceSynchronize();	
+
+  }
   } // while
   cudaFree(cuda_bufor);
   return EXIT_SUCCESS;
