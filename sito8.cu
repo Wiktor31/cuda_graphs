@@ -8,7 +8,7 @@
 #include <string.h>
 
 #define BUFSIZE 2048
-#define BUFSIZE1 20480
+#define BUFSIZE1 32768
 #define NMAX 20
 
 __global__ void test(char * BUFFOR1,int len) {
@@ -161,7 +161,7 @@ int main(int argc, char *argv[])
 	//BUFFOR[glen]='\0';
   if (i==1024){
 	  cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice);
-    test<<<1,32>>>(cuda_bufor,len);
+    test<<<1,1024>>>(cuda_bufor,len);
     cudaDeviceSynchronize();	
     i=0;
 
