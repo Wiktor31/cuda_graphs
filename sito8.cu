@@ -129,7 +129,7 @@ __global__ void test(char * BUFFOR1,int len) {
   //for (i=0;i<=n;i++) printf("%f ",x[i]);
   
   //printf("GPU:[%s]\n",BUFFOR);
-  printf("%s\n",BUFFOR);
+  printf("%d,%s\n",tid,BUFFOR);
 }
 
 
