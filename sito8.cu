@@ -8,7 +8,7 @@
 #include <string.h>
 
 #define BUFSIZE 2048
-#define BUFSIZE1 2048
+#define BUFSIZE1 20480
 #define NMAX 20
 
 __global__ void test(char * BUFFOR1,int len) {
@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
   
   int i = 0;
   cudaMalloc((void**)&cuda_bufor,BUFSIZE1);
-  while (fgets(BUFFOR,BUFSIZE-1,stdin) && i<32) {
+  while (fgets(BUFFOR,BUFSIZE-1,stdin) && i<1024) {
     int len = strlen(BUFFOR);
     for (int j = 0;j<len-1;j++){
       BUFFOR1[i*len+j]=BUFFOR[j];
@@ -159,7 +159,7 @@ int main(int argc, char *argv[])
      // if (eigensymmatrix(BUFFOR)) 
     //printf("Main:%s",BUFFOR);
 	//BUFFOR[glen]='\0';
-  if (i==32){
+  if (i==1024){
 	  cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice);
     test<<<1,32>>>(cuda_bufor,len);
     cudaDeviceSynchronize();	
