@@ -18,6 +18,8 @@ __global__ void test(char * BUFFOR1,int len) {
     }*/
   //char * BUFFOR=BUFOR1
   char *BUFFOR = BUFFOR1 + tid * len;
+
+  printf("%d,%s\n",tid,BUFFOR);
   int i,j,k,k3,k4,L,L1,z;
   double /* lambda, */ eps,g,h,ma,mn,norm,s,t,u,w;
   int cond;
