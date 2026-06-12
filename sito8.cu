@@ -145,9 +145,9 @@ int main(int argc, char *argv[])
   int i = 0;
   cudaMalloc((void**)&cuda_bufor,BUFSIZE1);
   while (fgets(BUFFOR,BUFSIZE-1,stdin) && i<32) {
-    len = strlen(BUFFOR);
+    int len = strlen(BUFFOR);
     for (int j = 0;j<len;j++){
-      BUFFOR1[i*len+j]=BUFFOR[j]
+      BUFFOR1[i*len+j]=BUFFOR[j];
     }
     i+=1;
      // if (eigensymmatrix(BUFFOR)) 
