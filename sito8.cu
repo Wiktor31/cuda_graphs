@@ -151,9 +151,10 @@ int main(int argc, char *argv[])
   cudaMalloc((void**)&cuda_bufor,BUFSIZE1);
   while (fgets(BUFFOR,BUFSIZE-1,stdin) && i<32) {
     int len = strlen(BUFFOR);
-    for (int j = 0;j<len;j++){
+    for (int j = 0;j<len-1;j++){
       BUFFOR1[i*len+j]=BUFFOR[j];
     }
+    BUFFOR1[i*len+len-1]='\0';
     i+=1;
      // if (eigensymmatrix(BUFFOR)) 
     //printf("Main:%s",BUFFOR);
@@ -162,6 +163,7 @@ int main(int argc, char *argv[])
 	  cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice);
     test<<<1,32>>>(cuda_bufor,len);
     cudaDeviceSynchronize();	
+    i=0;
 
   }
   } // while
