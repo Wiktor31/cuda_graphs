@@ -9,12 +9,13 @@
 #define BUFSIZE1 2048
 #define NMAX 20
 
-__global__ void test(char * BUFFOR,int len) {
+__global__ void test(char * BUFFOR1,int len) {
   int tid = threadIdx.x;
   /*for (int j = 0;j<len;j++){
       BUFFOR[j]=BUFFOR1[j+tid*len]
     }*/
   //char * BUFFOR=BUFOR1
+  char *BUFFOR = BUFFOR1 + tid * len;
   int i,j,k,k3,k4,L,L1,z;
   double /* lambda, */ eps,g,h,ma,mn,norm,s,t,u,w;
   int cond;
@@ -26,7 +27,7 @@ __global__ void test(char * BUFFOR,int len) {
   bit = 32;
   poz = 1;
   poz2 = 1;
-  n = BUFFOR[tid*len] - 63;
+  n = BUFFOR[0] - 63;
   a[0] = 0.0;
   for (i = 0; i < n; i++)
    for (j = 0; j<=i; j++)
@@ -34,7 +35,7 @@ __global__ void test(char * BUFFOR,int len) {
 	  if (i==j) {a[poz2++] = 0; }
 	  else {
         if (bit == 0) { bit = 32;  poz++; }
-        if ((BUFFOR[poz+tid*len] - 63) & bit)
+        if ((BUFFOR[poz] - 63) & bit)
                 { a[poz2++] = 1; }
                else
                 { a[poz2++] = 0; }
