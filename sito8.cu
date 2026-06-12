@@ -1,24 +1,26 @@
 /** 
 @file=sito8.cu
 */
-
+ 
+#include <omp.h>
+#include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
-
+ 
 #define BUFSIZE 2048
 #define BUFSIZE1 32768
 #define NMAX 20
-
-__global__ void test(char * BUFFOR1,int len) {
+ 
+__global__ void test(char * BUFFOR1,int len,int print_if) {
   int tid = threadIdx.x;
   /*for (int j = 0;j<len;j++){
       BUFFOR[j]=BUFFOR1[j+tid*len]
     }*/
   //char * BUFFOR=BUFOR1
   char *BUFFOR = BUFFOR1 + tid * len;
-
+ 
   //printf("%d,%s\n",tid,BUFFOR);
   int i,j,k,k3,k4,L,L1,z;
   double /* lambda, */ eps,g,h,ma,mn,norm,s,t,u,w;
@@ -129,26 +131,32 @@ __global__ void test(char * BUFFOR1,int len) {
     }
   }   
   //for (i=0;i<=n;i++) printf("%f ",x[i]);
-  
+ 
   //printf("GPU:[%s]\n",BUFFOR);
-  printf("%d,%s\n",tid,BUFFOR);
+  if (print_if>0)
+    printf("%d,%s\n",tid,BUFFOR);
 }
-
-
+ 
+ 
 /** 
-
+ 
 */
 int main(int argc, char *argv[])
 {
+ 
   char BUFFOR[BUFSIZE];
   char BUFFOR1[BUFSIZE1];
+ 
   char * cuda_bufor;
-  int glen = 2; 
-  
-  if (argc>1) {glen=strtol(argv[1],NULL,10);}  
-  
+  char * cuda_bufor1;
+  int print_if = 1; 
+ 
+  if (argc>1) {print_if=strtol(argv[1],NULL,10);}  
+ 
   int i = 0;
   cudaMalloc((void**)&cuda_bufor,BUFSIZE1);
+  cudaMalloc((void**)&cuda_bufor1,BUFSIZE);
+  double start, fin,full_time1,full_time2;
   while (fgets(BUFFOR,BUFSIZE-1,stdin) && i<1024) {
     int len = strlen(BUFFOR);
     for (int j = 0;j<len-1;j++){
@@ -159,14 +167,27 @@ int main(int argc, char *argv[])
      // if (eigensymmatrix(BUFFOR)) 
     //printf("Main:%s",BUFFOR);
 	//BUFFOR[glen]='\0';
-  if (i==1024){
-	  cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice);
-    test<<<1,1024>>>(cuda_bufor,len);
+    start = omp_get_wtime();
+    cudaMemcpy(cuda_bufor1,BUFFOR,BUFSIZE,cudaMemcpyHostToDevice);
+    test<<<1,1>>>(cuda_bufor,len,print_if);
     cudaDeviceSynchronize();	
-    i=0;
-
-  }
+    fin = omp_get_wtime();
+    full_time1+=fin-start;
+    if (i==1024){
+      start = omp_get_wtime();
+      cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice);
+      test<<<1,1024>>>(cuda_bufor,len,print_if);
+      cudaDeviceSynchronize();	
+      fin = omp_get_wtime();
+      full_time2+=fin-start;
+      i=0;
+ 
+    }
   } // while
+ 
+  printf("czas1 = %f \n",full_time1 );
+  printf("czas2 = %f \n",full_time2 );
   cudaFree(cuda_bufor);
+  cudaFree(cuda_bufor1);
   return EXIT_SUCCESS;
-} 
+}
