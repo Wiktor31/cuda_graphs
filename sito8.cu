@@ -15,6 +15,8 @@
  
 __global__ void test(char * BUFFOR1,int len,int print_if) {
   int tid = threadIdx.x;
+    
+  printf("%d,%s\n",tid,BUFFOR);
   /*for (int j = 0;j<len;j++){
       BUFFOR[j]=BUFFOR1[j+tid*len]
     }*/
@@ -133,8 +135,9 @@ __global__ void test(char * BUFFOR1,int len,int print_if) {
   //for (i=0;i<=n;i++) printf("%f ",x[i]);
  
   //printf("GPU:[%s]\n",BUFFOR);
+  printf("%d,%s\n",tid,BUFFOR);
   if (print_if>0)
-    printf("%d,%s\n",tid,BUFFOR);
+  printf("%d,%s\n",tid,BUFFOR);
 }
  
  
@@ -151,7 +154,7 @@ int main(int argc, char *argv[])
   char * cuda_bufor1;
   int print_if = 1; 
  
-  if (argc>1) {print_if=strtol(argv[1],NULL,10);}  
+  //if (argc>1) {print_if=strtol(argv[1],NULL,10);}  
  
   int i = 0;
   cudaMalloc((void**)&cuda_bufor,BUFSIZE1);
