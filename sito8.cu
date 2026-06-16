@@ -21,7 +21,6 @@ __global__ void test(char * BUFFOR1,int len,int print_if) {
     }*/
   //char * BUFFOR=BUFOR1
   char *BUFFOR = BUFFOR1 + tid * len;
-  printf("%d,%s\n",tid,BUFFOR);
  
   //printf("%d,%s\n",tid,BUFFOR);
   int i,j,k,k3,k4,L,L1,z;
@@ -154,7 +153,7 @@ int main(int argc, char *argv[])
   char * cuda_bufor1;
   int print_if = 1; 
  
-  //if (argc>1) {print_if=strtol(argv[1],NULL,10);}  
+  if (argc>1) {print_if=strtol(argv[1],NULL,10);}  
  
   int i = 0;
   cudaMalloc((void**)&cuda_bufor,BUFSIZE1);
