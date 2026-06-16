@@ -16,12 +16,12 @@
 __global__ void test(char * BUFFOR1,int len,int print_if) {
   int tid = threadIdx.x;
     
-  printf("%d,%s\n",tid,BUFFOR);
   /*for (int j = 0;j<len;j++){
       BUFFOR[j]=BUFFOR1[j+tid*len]
     }*/
   //char * BUFFOR=BUFOR1
   char *BUFFOR = BUFFOR1 + tid * len;
+  printf("%d,%s\n",tid,BUFFOR);
  
   //printf("%d,%s\n",tid,BUFFOR);
   int i,j,k,k3,k4,L,L1,z;
