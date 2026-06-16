@@ -172,7 +172,7 @@ int main(int argc, char *argv[])
 	//BUFFOR[glen]='\0';
     start = omp_get_wtime();
     cudaMemcpy(cuda_bufor1,BUFFOR,BUFSIZE,cudaMemcpyHostToDevice);
-    test<<<1,1>>>(cuda_bufor,len,print_if);
+    test<<<1,1>>>(cuda_bufor1,len,print_if);
     cudaDeviceSynchronize();	
     fin = omp_get_wtime();
     full_time1+=fin-start;
