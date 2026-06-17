@@ -201,7 +201,7 @@ int main(int argc, char *argv[])
       j=0;
       k+=1;
       if(k==100){
-        k=0
+        k=0;
         printf("\n");
       }
     }
