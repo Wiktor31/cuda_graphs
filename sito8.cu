@@ -165,23 +165,23 @@ int main(int argc, char *argv[])
   while (fgets(BUFFOR,BUFSIZE-1,stdin)) {
     int len = strlen(BUFFOR);
     for (int j1 = 0;j1<len-1;j1++){
-      //BUFFOR1[i*len+j1]=BUFFOR[j1];
+      BUFFOR1[i*len+j1]=BUFFOR[j1];
       BUFFOR2[j*len+j1]=BUFFOR[j1];
     }
-    //BUFFOR1[i*len+len-1]='\0';
+    BUFFOR1[i*len+len-1]='\0';
     BUFFOR2[j*len+len-1]='\0';
-    //i+=1;
+    i+=1;
     j+=1;
      // if (eigensymmatrix(BUFFOR)) 
     //printf("Main:%s",BUFFOR);
 	//BUFFOR[glen]='\0';
-    /*start = omp_get_wtime();
+    start = omp_get_wtime();
     cudaMemcpy(cuda_bufor1,BUFFOR,BUFSIZE,cudaMemcpyHostToDevice);
     test<<<1,1>>>(cuda_bufor1,len,0);
     cudaDeviceSynchronize();	
     fin = omp_get_wtime();
-    full_time1+=fin-start;*/
-    /*if (i==1024){
+    full_time1+=fin-start;
+    if (i==1024){
       start = omp_get_wtime();
       cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice);
       test<<<1,1024>>>(cuda_bufor,len,0);
@@ -189,7 +189,7 @@ int main(int argc, char *argv[])
       fin = omp_get_wtime();
       full_time2+=fin-start;
       i=0;
-    }*/
+    }
     if (j==66564){
       start = omp_get_wtime();
       cudaMemcpy(cuda_bufor2,BUFFOR2,BUFSIZE2,cudaMemcpyHostToDevice);
