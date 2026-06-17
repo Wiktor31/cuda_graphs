@@ -37,7 +37,7 @@ __global__ void test(char * BUFFOR1,int len,int print_if) {
   poz2 = 1;
   n = BUFFOR[0] - 63;
   a[0] = 0.0;
-  for (i = 0; i < n; i++)
+  /*for (i = 0; i < n; i++)
    for (j = 0; j<=i; j++)
     {
 	  if (i==j) {a[poz2++] = 0; }
@@ -47,6 +47,20 @@ __global__ void test(char * BUFFOR1,int len,int print_if) {
                 { a[poz2++] = 1; }
                else
                 { a[poz2++] = 0; }
+        bit = bit >> 1;
+	  }
+    }*/
+  //dopelniony below
+  for (i = 0; i < n; i++)
+   for (j = 0; j<=i; j++)
+    {
+	  if (i==j) {a[poz2++] = 0; }
+	  else {
+        if (bit == 0) { bit = 32;  poz++; }
+        if ((BUFFOR[poz] - 63) & bit)
+                { a[poz2++] = 0; }
+               else
+                { a[poz2++] = 1; }
         bit = bit >> 1;
 	  }
     }
