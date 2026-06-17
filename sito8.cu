@@ -161,7 +161,7 @@ int main(int argc, char *argv[])
   cudaMalloc((void**)&cuda_bufor,BUFSIZE1);
   cudaMalloc((void**)&cuda_bufor1,BUFSIZE);
   cudaMalloc((void**)&cuda_bufor2,BUFSIZE2);
-  double start, fin,full_time1=0.0,full_time2=0.0,full_time30.0;
+  double start, fin,full_time1=0.0,full_time2=0.0,full_time3=0.0;
   while (fgets(BUFFOR,BUFSIZE-1,stdin)) {
     int len = strlen(BUFFOR);
     for (int j1 = 0;j<len-1;j++){
@@ -210,7 +210,7 @@ int main(int argc, char *argv[])
   */
   printf("czas dla pojedynczych watkow = %f \n",full_time1 );
   printf("czas dla 1024 watkow = %f \n",full_time2 );
-  printf("czas dla 256 blokow z 256 watkami = %f \n",full_time2 );
+  printf("czas dla 256 blokow z 256 watkami = %f \n",full_time3 );
   cudaFree(cuda_bufor);
   cudaFree(cuda_bufor1);
   return EXIT_SUCCESS;
