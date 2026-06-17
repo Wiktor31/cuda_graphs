@@ -165,12 +165,12 @@ int main(int argc, char *argv[])
   while (fgets(BUFFOR,BUFSIZE-1,stdin)) {
     int len = strlen(BUFFOR);
     for (int j1 = 0;j1<len-1;j1++){
-      BUFFOR1[i*len+j1]=BUFFOR[j1];
+      //BUFFOR1[i*len+j1]=BUFFOR[j1];
       BUFFOR2[j*len+j1]=BUFFOR[j1];
     }
-    BUFFOR1[i*len+len-1]='\0';
+    //BUFFOR1[i*len+len-1]='\0';
     BUFFOR2[j*len+len-1]='\0';
-    i+=1;
+    //i+=1;
     j+=1;
      // if (eigensymmatrix(BUFFOR)) 
     //printf("Main:%s",BUFFOR);
@@ -198,6 +198,7 @@ int main(int argc, char *argv[])
       fin = omp_get_wtime();
       full_time3+=fin-start;
       j=0;
+      printf("done\n");
     }
  
   } // while
