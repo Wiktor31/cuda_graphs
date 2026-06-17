@@ -199,7 +199,7 @@ int main(int argc, char *argv[])
       fin = omp_get_wtime();
       full_time3+=fin-start;
       j=0;
-      k+=1
+      k+=1;
       if(k==100){
         k=0
         printf("\n");
