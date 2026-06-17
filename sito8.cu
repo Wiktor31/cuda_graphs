@@ -11,10 +11,11 @@
  
 #define BUFSIZE 2048
 #define BUFSIZE1 32768
+#define BUFSIZE2 32*66564
 #define NMAX 20
  
 __global__ void test(char * BUFFOR1,int len,int print_if) {
-  int tid = threadIdx.x;
+  int tid = threadIdx.x+(blockIdx.x*blockDim.x);
     
   /*for (int j = 0;j<len;j++){
       BUFFOR[j]=BUFFOR1[j+tid*len]
@@ -147,52 +148,69 @@ int main(int argc, char *argv[])
  
   char BUFFOR[BUFSIZE];
   char BUFFOR1[BUFSIZE1];
+  char BUFFOR2[BUFSIZE2];
  
   char * cuda_bufor;
   char * cuda_bufor1;
+  char * cuda_bufor2;
   int print_if = 1; 
  
   if (argc>1) {print_if=strtol(argv[1],NULL,10);}  
  
-  int i = 0;
+  int i = 0,j=0;
   cudaMalloc((void**)&cuda_bufor,BUFSIZE1);
   cudaMalloc((void**)&cuda_bufor1,BUFSIZE);
-  double start, fin,full_time1,full_time2;
+  cudaMalloc((void**)&cuda_bufor2,BUFSIZE2);
+  double start, fin,full_time1=0.0,full_time2=0.0,full_time30.0;
   while (fgets(BUFFOR,BUFSIZE-1,stdin)) {
     int len = strlen(BUFFOR);
-    for (int j = 0;j<len-1;j++){
-      BUFFOR1[i*len+j]=BUFFOR[j];
+    for (int j1 = 0;j<len-1;j++){
+      BUFFOR1[i*len+j1]=BUFFOR[j1];
+      BUFFOR2[j*len+j1]=BUFFOR[j1];
     }
     BUFFOR1[i*len+len-1]='\0';
+    BUFFOR2[j*len+len-1]='\0';
     i+=1;
+    j+=1;
      // if (eigensymmatrix(BUFFOR)) 
     //printf("Main:%s",BUFFOR);
 	//BUFFOR[glen]='\0';
-    start = omp_get_wtime();
+    /*start = omp_get_wtime();
     cudaMemcpy(cuda_bufor1,BUFFOR,BUFSIZE,cudaMemcpyHostToDevice);
     test<<<1,1>>>(cuda_bufor1,len,0);
     cudaDeviceSynchronize();	
     fin = omp_get_wtime();
-    full_time1+=fin-start;
-    if (i==1024){
+    full_time1+=fin-start;*/
+    /*if (i==1024){
       start = omp_get_wtime();
       cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice);
-      test<<<1,1024>>>(cuda_bufor,len,print_if);
+      test<<<1,1024>>>(cuda_bufor,len,0);
       cudaDeviceSynchronize();	
       fin = omp_get_wtime();
       full_time2+=fin-start;
       i=0;
- 
+    }*/
+    if (j==66564){
+      start = omp_get_wtime();
+      cudaMemcpy(cuda_bufor2,BUFFOR2,BUFSIZE2,cudaMemcpyHostToDevice);
+      test<<<256,256>>>(cuda_bufor2,len,print_if);
+      cudaDeviceSynchronize();	
+      fin = omp_get_wtime();
+      full_time3+=fin-start;
+      j=0;
     }
+ 
   } // while
-  start = omp_get_wtime();
+  /*start = omp_get_wtime();
   cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice);
   test<<<1,i>>>(cuda_bufor,len,print_if);
   cudaDeviceSynchronize();	
   fin = omp_get_wtime();
   full_time2+=fin-start;
-  printf("czas1 = %f \n",full_time1 );
-  printf("czas2 = %f \n",full_time2 );
+  */
+  printf("czas dla pojedynczych watkow = %f \n",full_time1 );
+  printf("czas dla 1024 watkow = %f \n",full_time2 );
+  printf("czas dla 256 blokow z 256 watkami = %f \n",full_time2 );
   cudaFree(cuda_bufor);
   cudaFree(cuda_bufor1);
   return EXIT_SUCCESS;
