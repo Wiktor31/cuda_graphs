@@ -164,7 +164,7 @@ int main(int argc, char *argv[])
   double start, fin,full_time1=0.0,full_time2=0.0,full_time3=0.0;
   while (fgets(BUFFOR,BUFSIZE-1,stdin)) {
     int len = strlen(BUFFOR);
-    for (int j1 = 0;j<len-1;j++){
+    for (int j1 = 0;j1<len-1;j1++){
       BUFFOR1[i*len+j1]=BUFFOR[j1];
       BUFFOR2[j*len+j1]=BUFFOR[j1];
     }
