@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
   cudaMalloc((void**)&cuda_bufor,BUFSIZE1);
   cudaMalloc((void**)&cuda_bufor1,BUFSIZE);
   double start, fin,full_time1,full_time2;
-  while (fgets(BUFFOR,BUFSIZE-1,stdin) && i<1024) {
+  while (fgets(BUFFOR,BUFSIZE-1,stdin)) {
     int len = strlen(BUFFOR);
     for (int j = 0;j<len-1;j++){
       BUFFOR1[i*len+j]=BUFFOR[j];
@@ -185,7 +185,12 @@ int main(int argc, char *argv[])
  
     }
   } // while
- 
+  start = omp_get_wtime();
+  cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice);
+  test<<<1,i>>>(cuda_bufor,len,print_if);
+  cudaDeviceSynchronize();	
+  fin = omp_get_wtime();
+  full_time2+=fin-start;
   printf("czas1 = %f \n",full_time1 );
   printf("czas2 = %f \n",full_time2 );
   cudaFree(cuda_bufor);
