@@ -161,6 +161,7 @@ int main(int argc, char *argv[])
   cudaMalloc((void**)&cuda_bufor,BUFSIZE1);
   cudaMalloc((void**)&cuda_bufor1,BUFSIZE);
   cudaMalloc((void**)&cuda_bufor2,BUFSIZE2);
+  int k=0;
   double start, fin,full_time1=0.0,full_time2=0.0,full_time3=0.0;
   while (fgets(BUFFOR,BUFSIZE-1,stdin)) {
     int len = strlen(BUFFOR);
@@ -198,7 +199,11 @@ int main(int argc, char *argv[])
       fin = omp_get_wtime();
       full_time3+=fin-start;
       j=0;
-      printf("done\n");
+      k+=1
+      if(k==100){
+        k=0
+        printf("\n");
+      }
     }
  
   } // while
