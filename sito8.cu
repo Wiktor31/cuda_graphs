@@ -14,13 +14,18 @@
 #define BUFSIZE2 32*66564
 #define NMAX 20
  
-__global__ void test(char * BUFFOR1,int len,int print_if) {
+__global__ void test(char * BUFFOR1,int len,int print_if,int limit) {
   int tid = threadIdx.x+(blockIdx.x*blockDim.x);
     
   /*for (int j = 0;j<len;j++){
       BUFFOR[j]=BUFFOR1[j+tid*len]
     }*/
   //char * BUFFOR=BUFOR1
+
+  if (tid>=limit){
+    printf("%d return",tid);
+    return;
+  } 
   char *BUFFOR = BUFFOR1 + tid * len;
  
   //printf("%d,%s\n",tid,BUFFOR);
@@ -37,20 +42,6 @@ __global__ void test(char * BUFFOR1,int len,int print_if) {
   poz2 = 1;
   n = BUFFOR[0] - 63;
   a[0] = 0.0;
-  /*for (i = 0; i < n; i++)
-   for (j = 0; j<=i; j++)
-    {
-	  if (i==j) {a[poz2++] = 0; }
-	  else {
-        if (bit == 0) { bit = 32;  poz++; }
-        if ((BUFFOR[poz] - 63) & bit)
-                { a[poz2++] = 1; }
-               else
-                { a[poz2++] = 0; }
-        bit = bit >> 1;
-	  }
-    }*/
-  //dopelniony below
   for (i = 0; i < n; i++)
    for (j = 0; j<=i; j++)
     {
@@ -58,12 +49,26 @@ __global__ void test(char * BUFFOR1,int len,int print_if) {
 	  else {
         if (bit == 0) { bit = 32;  poz++; }
         if ((BUFFOR[poz] - 63) & bit)
+                { a[poz2++] = 1; }
+               else
+                { a[poz2++] = 0; }
+        bit = bit >> 1;
+	  }
+    }
+  //dopelniony below
+  /*for (i = 0; i < n; i++)
+   for (j = 0; j<=i; j++)
+    {
+	  if (i==j) {a[poz2++] = 0; }
+	  else {
+        if (bit == 0) { bit = 32;  poz++; }
+        if ((BUFFOR[poz] - 63) & bit)
                 { a[poz2++] = 0; }
                else
                 { a[poz2++] = 1; }
         bit = bit >> 1;
 	  }
-    }
+    }*/
  
   int k1 = 1;
   int k2 = n;
@@ -180,54 +185,67 @@ int main(int argc, char *argv[])
   while (fgets(BUFFOR,BUFSIZE-1,stdin)) {
     int len = strlen(BUFFOR);
     for (int j1 = 0;j1<len-1;j1++){
-      //BUFFOR1[i*len+j1]=BUFFOR[j1];
+      BUFFOR1[i*len+j1]=BUFFOR[j1];
       BUFFOR2[j*len+j1]=BUFFOR[j1];
     }
-    //BUFFOR1[i*len+len-1]='\0';
+    BUFFOR1[i*len+len-1]='\0';
     BUFFOR2[j*len+len-1]='\0';
-    //i+=1;
+    i+=1;
     j+=1;
      // if (eigensymmatrix(BUFFOR)) 
     //printf("Main:%s",BUFFOR);
-	//BUFFOR[glen]='\0';
-    /*start = omp_get_wtime();
-    cudaMemcpy(cuda_bufor1,BUFFOR,BUFSIZE,cudaMemcpyHostToDevice);
+	BUFFOR[glen]='\0';
+    start = omp_get_wtime();
+    cudaMemcpy(cuda_bufor1,BUFFOR,BUFSIZE,cudaMemcpyHostToDevice1);
     test<<<1,1>>>(cuda_bufor1,len,print_if);
     cudaDeviceSynchronize();	
     fin = omp_get_wtime();
     full_time1+=fin-start;
     if (i==1024){
       start = omp_get_wtime();
-      cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice);
+      cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice,1024);
       test<<<1,1024>>>(cuda_bufor,len,print_if);
       cudaDeviceSynchronize();	
       fin = omp_get_wtime();
       full_time2+=fin-start;
       i=0;
-    }*/
+    }
     if (j==66564){
       start = omp_get_wtime();
-      cudaMemcpy(cuda_bufor2,BUFFOR2,BUFSIZE2,cudaMemcpyHostToDevice);
+      cudaMemcpy(cuda_bufor2,BUFFOR2,BUFSIZE2,cudaMemcpyHostToDevice,66564);
       test<<<256,256>>>(cuda_bufor2,len,print_if);
       cudaDeviceSynchronize();	
       fin = omp_get_wtime();
       full_time3+=fin-start;
       j=0;
       k+=1;
-      if(k==100){
-        k=0;
-        printf("\n");
-      }
+
+
+
+      printf("czas dla pojedynczych watkow = %f \n",full_time1 );
+      printf("czas dla 1024 watkow = %f \n",full_time2 );
+      printf("czas dla 256 blokow z 256 watkami = %f \n",full_time3 );
     }
  
   } // while
-  /*start = omp_get_wtime();
-  cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice);
+  start = omp_get_wtime();
+  cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice,i);
   test<<<1,i>>>(cuda_bufor,len,print_if);
   cudaDeviceSynchronize();	
   fin = omp_get_wtime();
   full_time2+=fin-start;
-  */
+  
+
+  start = omp_get_wtime();
+  cudaMemcpy(cuda_bufor2,BUFFOR2,BUFSIZE2,cudaMemcpyHostToDevice,j);
+  test<<<256,256>>>(cuda_bufor2,len,print_if);
+  cudaDeviceSynchronize();	
+  fin = omp_get_wtime();
+  full_time3+=fin-start;
+  j=0;
+  k+=1;
+
+
   printf("czas dla pojedynczych watkow = %f \n",full_time1 );
   printf("czas dla 1024 watkow = %f \n",full_time2 );
   printf("czas dla 256 blokow z 256 watkami = %f \n",full_time3 );
