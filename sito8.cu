@@ -181,7 +181,7 @@ int main(int argc, char *argv[])
   cudaMalloc((void**)&cuda_bufor1,BUFSIZE);
   cudaMalloc((void**)&cuda_bufor2,BUFSIZE2);
   int k=0;
-  double start, fin,full_time1=0.0,full_time2=0.0,full_time3=0.0;
+  double start, fin,full_time1=0.0,full_time2=0.0,full_time3=0.0,full_time4=0.0,full_time5=0.0;
   while (fgets(BUFFOR,BUFSIZE-1,stdin)) {
     len = strlen(BUFFOR);
     for (int j1 = 0;j1<len-1;j1++){
@@ -208,6 +208,21 @@ int main(int argc, char *argv[])
       cudaDeviceSynchronize();	
       fin = omp_get_wtime();
       full_time2+=fin-start;
+      
+
+      start = omp_get_wtime();
+      cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice);
+      test<<<1024,0>>>(cuda_bufor,len,print_if,1024);
+      cudaDeviceSynchronize();	
+      fin = omp_get_wtime();
+      full_time4+=fin-start;
+
+      start = omp_get_wtime();
+      cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice);
+      test<<<32,32>>>(cuda_bufor,len,print_if,1024);
+      cudaDeviceSynchronize();	
+      fin = omp_get_wtime();
+      full_time5+=fin-start;
       i=0;
     }
     if (j==66564){
@@ -222,8 +237,11 @@ int main(int argc, char *argv[])
 
 
 
+
       printf("czas dla pojedynczych watkow = %f \n",full_time1 );
       printf("czas dla 1024 watkow = %f \n",full_time2 );
+      printf("czas dla 1024 blokow z jednym watkiem = %f \n",full_time4 );
+      printf("czas dla 32 blokow z 32 watkami = %f \n",full_time5 );
       printf("czas dla 256 blokow z 256 watkami = %f \n",full_time3 );
     }
  
@@ -235,6 +253,19 @@ int main(int argc, char *argv[])
   fin = omp_get_wtime();
   full_time2+=fin-start;
   
+  start = omp_get_wtime();
+  cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice);
+  test<<<i,0>>>(cuda_bufor,len,print_if,i);
+  cudaDeviceSynchronize();	
+  fin = omp_get_wtime();
+  full_time4+=fin-start;
+
+  start = omp_get_wtime();
+  cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice);
+  test<<<32,32>>>(cuda_bufor,len,print_if,i);
+  cudaDeviceSynchronize();	
+  fin = omp_get_wtime();
+  full_time5+=fin-start;
 
   start = omp_get_wtime();
   cudaMemcpy(cuda_bufor2,BUFFOR2,BUFSIZE2,cudaMemcpyHostToDevice);
@@ -248,6 +279,8 @@ int main(int argc, char *argv[])
 
   printf("czas dla pojedynczych watkow = %f \n",full_time1 );
   printf("czas dla 1024 watkow = %f \n",full_time2 );
+  printf("czas dla 1024 blokow z jednym watkiem = %f \n",full_time4 );
+  printf("czas dla 32 blokow z 32 watkami = %f \n",full_time5 );
   printf("czas dla 256 blokow z 256 watkami = %f \n",full_time3 );
   cudaFree(cuda_bufor);
   cudaFree(cuda_bufor1);
