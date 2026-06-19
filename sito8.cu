@@ -215,7 +215,7 @@ int main(int argc, char *argv[])
 
       start = omp_get_wtime();
       cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice);
-      test<<<1024,0>>>(cuda_bufor,len,0,1024);
+      test<<<1024,1>>>(cuda_bufor,len,0,1024);
       cudaDeviceSynchronize();	
       fin = omp_get_wtime();
       full_time4+=fin-start;
@@ -264,7 +264,7 @@ int main(int argc, char *argv[])
   
   start = omp_get_wtime();
   cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice);
-  test<<<i,0>>>(cuda_bufor,len,0,i);
+  test<<<i,1>>>(cuda_bufor,len,0,i);
   cudaDeviceSynchronize();	
   fin = omp_get_wtime();
   full_time4+=fin-start;
