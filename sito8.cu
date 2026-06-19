@@ -194,7 +194,7 @@ int main(int argc, char *argv[])
     j+=1;
      // if (eigensymmatrix(BUFFOR)) 
     //printf("Main:%s",BUFFOR);
-	BUFFOR[glen]='\0';
+	  //BUFFOR[glen]='\0';
     start = omp_get_wtime();
     cudaMemcpy(cuda_bufor1,BUFFOR,BUFSIZE,cudaMemcpyHostToDevice1);
     test<<<1,1>>>(cuda_bufor1,len,print_if);
