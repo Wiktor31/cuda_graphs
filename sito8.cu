@@ -207,7 +207,7 @@ int main(int argc, char *argv[])
     if (i==1024){
       start = omp_get_wtime();
       cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice);
-      test<<<1,1024>>>(cuda_bufor,len,0,1024);
+      test<<<1,1024>>>(cuda_bufor,len,1,1024);
       cudaDeviceSynchronize();	
       fin = omp_get_wtime();
       full_time2+=fin-start;
