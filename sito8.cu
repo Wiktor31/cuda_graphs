@@ -181,7 +181,7 @@ int main(int argc, char *argv[])
   cudaMalloc((void**)&cuda_bufor,BUFSIZE1);
   cudaMalloc((void**)&cuda_bufor1,BUFSIZE);
   cudaMalloc((void**)&cuda_bufor2,BUFSIZE2);
-  int k=0,iter=0;
+  int k=0,iter=0,now=1;
   double start, fin,full_time1=0.0,full_time2=0.0,full_time3=0.0,full_time4=0.0,full_time5=0.0;
   while (fgets(BUFFOR,BUFSIZE-1,stdin)) {
     len = strlen(BUFFOR);
@@ -240,6 +240,8 @@ int main(int argc, char *argv[])
 
 
       iter+=1;
+      if (iter>=now)
+      {
       printf("dla 66564 * %d\n",iter);
 
       if (active==1)
@@ -248,6 +250,8 @@ int main(int argc, char *argv[])
       printf("czas dla 1024 blokow z jednym watkiem = %f \n",full_time4 );
       printf("czas dla 32 blokow z 32 watkami = %f \n",full_time5 );
       printf("czas dla 256 blokow z 256 watkami = %f \n",full_time3 );
+      now=now*2;
+      }
     }
  
   } // while
