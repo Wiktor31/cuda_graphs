@@ -202,9 +202,9 @@ int main(int argc, char *argv[])
 	  //BUFFOR[glen]='\0';
     if (active==1){
     start = omp_get_wtime();
-    cudaMemcpy(cuda_bufor1,BUFFOR,BUFSIZE,cudaMemcpyHostToDevice);
+    /*cudaMemcpy(cuda_bufor1,BUFFOR,BUFSIZE,cudaMemcpyHostToDevice);
     test<<<1,1>>>(cuda_bufor1,len,1,1);
-    cudaDeviceSynchronize();	
+    cudaDeviceSynchronize();	*/
 
 
 cudaError_t err = cudaGetLastError();
