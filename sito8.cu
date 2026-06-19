@@ -173,14 +173,15 @@ int main(int argc, char *argv[])
   char * cuda_bufor1;
   char * cuda_bufor2;
   int print_if = 1; 
- 
+  int active = 1;
   if (argc>1) {print_if=strtol(argv[1],NULL,10);}  
+  if (argc>2) {active=strtol(argv[2],NULL,10);}  
  
   int i = 0,j=0,len;
   cudaMalloc((void**)&cuda_bufor,BUFSIZE1);
   cudaMalloc((void**)&cuda_bufor1,BUFSIZE);
   cudaMalloc((void**)&cuda_bufor2,BUFSIZE2);
-  int k=0,iter0;
+  int k=0,iter=0;
   double start, fin,full_time1=0.0,full_time2=0.0,full_time3=0.0,full_time4=0.0,full_time5=0.0;
   while (fgets(BUFFOR,BUFSIZE-1,stdin)) {
     len = strlen(BUFFOR);
@@ -195,12 +196,14 @@ int main(int argc, char *argv[])
      // if (eigensymmatrix(BUFFOR)) 
     //printf("Main:%s",BUFFOR);
 	  //BUFFOR[glen]='\0';
+    if (active==1){
     start = omp_get_wtime();
     cudaMemcpy(cuda_bufor1,BUFFOR,BUFSIZE,cudaMemcpyHostToDevice);
     test<<<1,1>>>(cuda_bufor1,len,print_if,1);
     cudaDeviceSynchronize();	
     fin = omp_get_wtime();
     full_time1+=fin-start;
+    }
     if (i==1024){
       start = omp_get_wtime();
       cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice);
