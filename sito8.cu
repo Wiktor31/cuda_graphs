@@ -176,14 +176,14 @@ int main(int argc, char *argv[])
  
   if (argc>1) {print_if=strtol(argv[1],NULL,10);}  
  
-  int i = 0,j=0;
+  int i = 0,j=0,len;
   cudaMalloc((void**)&cuda_bufor,BUFSIZE1);
   cudaMalloc((void**)&cuda_bufor1,BUFSIZE);
   cudaMalloc((void**)&cuda_bufor2,BUFSIZE2);
   int k=0;
   double start, fin,full_time1=0.0,full_time2=0.0,full_time3=0.0;
   while (fgets(BUFFOR,BUFSIZE-1,stdin)) {
-    int len = strlen(BUFFOR);
+    len = strlen(BUFFOR);
     for (int j1 = 0;j1<len-1;j1++){
       BUFFOR1[i*len+j1]=BUFFOR[j1];
       BUFFOR2[j*len+j1]=BUFFOR[j1];
