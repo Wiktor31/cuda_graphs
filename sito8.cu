@@ -199,7 +199,7 @@ int main(int argc, char *argv[])
     if (active==1){
     start = omp_get_wtime();
     cudaMemcpy(cuda_bufor1,BUFFOR,BUFSIZE,cudaMemcpyHostToDevice);
-    test<<<1,1>>>(cuda_bufor1,len,print_if,1);
+    test<<<1,1>>>(cuda_bufor1,len,0,1);
     cudaDeviceSynchronize();	
     fin = omp_get_wtime();
     full_time1+=fin-start;
@@ -207,7 +207,7 @@ int main(int argc, char *argv[])
     if (i==1024){
       start = omp_get_wtime();
       cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice);
-      test<<<1,1024>>>(cuda_bufor,len,print_if,1024);
+      test<<<1,1024>>>(cuda_bufor,len,0,1024);
       cudaDeviceSynchronize();	
       fin = omp_get_wtime();
       full_time2+=fin-start;
@@ -215,14 +215,14 @@ int main(int argc, char *argv[])
 
       start = omp_get_wtime();
       cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice);
-      test<<<1024,0>>>(cuda_bufor,len,print_if,1024);
+      test<<<1024,0>>>(cuda_bufor,len,0,1024);
       cudaDeviceSynchronize();	
       fin = omp_get_wtime();
       full_time4+=fin-start;
 
       start = omp_get_wtime();
       cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice);
-      test<<<32,32>>>(cuda_bufor,len,print_if,1024);
+      test<<<32,32>>>(cuda_bufor,len,0,1024);
       cudaDeviceSynchronize();	
       fin = omp_get_wtime();
       full_time5+=fin-start;
@@ -257,21 +257,21 @@ int main(int argc, char *argv[])
   } // while
   start = omp_get_wtime();
   cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice);
-  test<<<1,i>>>(cuda_bufor,len,print_if,i);
+  test<<<1,i>>>(cuda_bufor,len,0,i);
   cudaDeviceSynchronize();	
   fin = omp_get_wtime();
   full_time2+=fin-start;
   
   start = omp_get_wtime();
   cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice);
-  test<<<i,0>>>(cuda_bufor,len,print_if,i);
+  test<<<i,0>>>(cuda_bufor,len,0,i);
   cudaDeviceSynchronize();	
   fin = omp_get_wtime();
   full_time4+=fin-start;
 
   start = omp_get_wtime();
   cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice);
-  test<<<32,32>>>(cuda_bufor,len,print_if,i);
+  test<<<32,32>>>(cuda_bufor,len,0,i);
   cudaDeviceSynchronize();	
   fin = omp_get_wtime();
   full_time5+=fin-start;
