@@ -180,7 +180,7 @@ int main(int argc, char *argv[])
   cudaMalloc((void**)&cuda_bufor,BUFSIZE1);
   cudaMalloc((void**)&cuda_bufor1,BUFSIZE);
   cudaMalloc((void**)&cuda_bufor2,BUFSIZE2);
-  int k=0;
+  int k=0,iter0;
   double start, fin,full_time1=0.0,full_time2=0.0,full_time3=0.0,full_time4=0.0,full_time5=0.0;
   while (fgets(BUFFOR,BUFSIZE-1,stdin)) {
     len = strlen(BUFFOR);
@@ -236,8 +236,8 @@ int main(int argc, char *argv[])
       k+=1;
 
 
-
-
+      iter+=1;
+      printf("dla 66564 * %d",iter);
       printf("czas dla pojedynczych watkow = %f \n",full_time1 );
       printf("czas dla 1024 watkow = %f \n",full_time2 );
       printf("czas dla 1024 blokow z jednym watkiem = %f \n",full_time4 );
