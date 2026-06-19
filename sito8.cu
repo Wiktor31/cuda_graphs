@@ -156,7 +156,6 @@ __global__ void test(char * BUFFOR1,int len,int print_if,int limit) {
   //for (i=0;i<=n;i++) printf("%f ",x[i]);
  
   //printf("GPU:[%s]\n",BUFFOR);
-  printf("%s\n",BUFFOR);
   if (print_if>0)
   printf("%s\n",BUFFOR);
 }
