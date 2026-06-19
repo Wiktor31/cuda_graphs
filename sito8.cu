@@ -240,7 +240,9 @@ int main(int argc, char *argv[])
 
 
       iter+=1;
-      printf("dla 66564 * %d",iter);
+      printf("dla 66564 * %d\n",iter);
+
+      if (active==1)
       printf("czas dla pojedynczych watkow = %f \n",full_time1 );
       printf("czas dla 1024 watkow = %f \n",full_time2 );
       printf("czas dla 1024 blokow z jednym watkiem = %f \n",full_time4 );
@@ -280,6 +282,7 @@ int main(int argc, char *argv[])
   k+=1;
 
 
+  if (active==1)
   printf("czas dla pojedynczych watkow = %f \n",full_time1 );
   printf("czas dla 1024 watkow = %f \n",full_time2 );
   printf("czas dla 1024 blokow z jednym watkiem = %f \n",full_time4 );
