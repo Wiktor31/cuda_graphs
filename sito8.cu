@@ -205,6 +205,19 @@ int main(int argc, char *argv[])
     cudaMemcpy(cuda_bufor1,BUFFOR,BUFSIZE,cudaMemcpyHostToDevice);
     test<<<1,1>>>(cuda_bufor1,len,1,1);
     cudaDeviceSynchronize();	
+
+
+cudaError_t err = cudaGetLastError();
+printf("after memcpy: %s\n", cudaGetErrorString(err));
+
+test<<<1,1>>>(cuda_bufor1, len, 1, 1);
+
+err = cudaGetLastError();
+printf("after launch: %s\n", cudaGetErrorString(err));
+
+err = cudaDeviceSynchronize();
+printf("after sync: %s\n", cudaGetErrorString(err));
+
     fin = omp_get_wtime();
     full_time1+=fin-start;
     }
