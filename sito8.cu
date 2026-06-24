@@ -10,21 +10,21 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
-
-
+#include <signal.h>
+#include <unistd.h>
 
 #define BUFSIZE 2048
 #define BUFSIZE1 32768
 #define BUFSIZE2 32*66564
 #define NMAX 20
  
+FILE *file_log;
 
-struct record
-{
-    const char *iteration;
-    const char *name;
-    double time;
-};
+void signalHandler(int sig) {
+  if(file_log)
+    fprintf(file_log,"]\n");
+    _exit(sig);
+}
 
 
 __global__ void test(char * BUFFOR1,int len,int print_if,int limit) {
@@ -294,7 +294,7 @@ void test_omp(char * BUFFOR1,int len,int iter) {
 */
 int main(int argc, char *argv[])
 {
- 
+  signal(SIGINT, signalHandler); 
   char BUFFOR[BUFSIZE];
   char BUFFOR2[BUFSIZE2];
  
@@ -306,7 +306,7 @@ int main(int argc, char *argv[])
   if (argc>3) {print_if=strtol(argv[3],NULL,10);}  
   if (argc>4) {show_1=strtol(argv[4],NULL,10);}  
   if (argc>5) {file = argv[5];}  
-  FILE *file_log = fopen(file,"w");
+  file_log = fopen(file,"w");
   if(file_log==NULL){
     printf("Error file");
     return 1;
