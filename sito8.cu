@@ -22,13 +22,13 @@ __global__ void test(char * BUFFOR1,int len,int print_if,int limit) {
     }*/
   //char * BUFFOR=BUFOR1
 
-  printf("%s\n",BUFFOR);
   if (tid==limit){
     if (tid==limit) printf("%d return\n",tid);
     return;
   } 
 
   char *BUFFOR = BUFFOR1 + tid * len;
+  printf("%s\n",BUFFOR);
   
  
   //printf("%d,%s\n",tid,BUFFOR);
