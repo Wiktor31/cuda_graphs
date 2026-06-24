@@ -274,7 +274,6 @@ void test_omp(char * BUFFOR1,int len,int iter) {
 	  if  (!(( ceilf(u) - u  < 10e-5 ) || ( u - floorf(u) < 10e-5 ))) { return; };
     }
   }
-  printf("%s\n",BUFFOR);
 }
  
 /** 
@@ -341,7 +340,7 @@ int main(int argc, char *argv[])
           test_omp(BUFFOR1,len,i1);
         }
         fin = omp_get_wtime();
-        full_time_omp0 = fin - start;
+        full_time_omp0 += fin - start;
 
         start = omp_get_wtime();
         #pragma omp parallel for  schedule(static)
@@ -349,7 +348,7 @@ int main(int argc, char *argv[])
           test_omp(BUFFOR1,len,i1);
         }
         fin = omp_get_wtime();
-        full_time_omp1 = fin - start;
+        full_time_omp1 += fin - start;
 
         start = omp_get_wtime(); 
         #pragma omp parallel for  schedule(dynamic)
@@ -357,7 +356,7 @@ int main(int argc, char *argv[])
           test_omp(BUFFOR1,len,i1);
         }
         fin = omp_get_wtime();
-        full_time_omp2 = fin - start;
+        full_time_omp2 += fin - start;
       }
       
 
@@ -452,7 +451,7 @@ int main(int argc, char *argv[])
         test_omp(BUFFOR1,len,i1);
       }
       fin = omp_get_wtime();
-      full_time_omp0 = fin - start;
+      full_time_omp0 += fin - start;
 
       start = omp_get_wtime();
       #pragma omp parallel for  schedule(static)
@@ -460,7 +459,7 @@ int main(int argc, char *argv[])
         test_omp(BUFFOR1,len,i1);
       }
       fin = omp_get_wtime();
-      full_time_omp1 = fin - start;
+      full_time_omp1 += fin - start;
 
       start = omp_get_wtime(); 
       #pragma omp parallel for  schedule(dynamic)
@@ -468,7 +467,7 @@ int main(int argc, char *argv[])
         test_omp(BUFFOR1,len,i1);
       }
       fin = omp_get_wtime();
-      full_time_omp2 = fin - start;
+      full_time_omp2 += fin - start;
     }
 
   if (active==1)
