@@ -287,10 +287,11 @@ int main(int argc, char *argv[])
  
   char * cuda_bufor;
   int print_if = 1,omp_use=1; 
-  int active = 1,blokow=1,watkow=1;
+  int show_1 = 1,blokow=1,watkow=1;
   if (argc>1) {print_if=strtol(argv[1],NULL,10);}  
   if (argc>2) {blokow=strtol(argv[2],NULL,10);}  
   if (argc>3) {watkow=strtol(argv[3],NULL,10);}  
+  if (argc>4) {show_1=strtol(argv[3],NULL,10);}  
  
   int i = 0,j=0,len;
   cudaMalloc((void**)&cuda_bufor,BUFSIZE2);
@@ -322,9 +323,13 @@ int main(int argc, char *argv[])
     }
     if (iter>=now)
       {
-      printf("dla %d * %d\n",blokow*watkow,iter);
-      printf("czas dla %d blokow i %d watkow = %f \n",blokow,watkow,full_time1 );
-      printf("czas dla ladowania = %f \n",full_time_help );
+        if (show_1==1)
+        {
+          printf("dla %d * %d\n",blokow*watkow,iter);
+          printf("czas dla %d blokow i %d watkow = %f \n",blokow,watkow,full_time1 );
+          printf("czas dla ladowania = %f \n",full_time_help );
+
+        }
       
       now=now*2;
       }
@@ -342,9 +347,12 @@ int main(int argc, char *argv[])
     i=0;
     iter+=1;
   }
-  printf("dla %d * %d\n",blokow*watkow,iter);
-  printf("czas dla %d blokow i %d watkow = %f \n",blokow,watkow,full_time1 );
-  printf("czas dla ladowania = %f \n",full_time_help );
+  if(show_1){
+
+    printf("dla %d * %d\n",blokow*watkow,iter);
+    printf("czas dla %d blokow i %d watkow = %f \n",blokow,watkow,full_time1 );
+    printf("czas dla ladowania = %f \n",full_time_help );
+  }
   
   cudaFree(cuda_bufor);
   return EXIT_SUCCESS;
