@@ -22,7 +22,12 @@ FILE *file_log;
 
 void signalHandler(int sig) {
   if(file_log)
+  {
+
     fprintf(file_log,"]\n");
+    fflush(file_log);
+    fclose(file_log);
+  }
     _exit(sig);
 }
 
