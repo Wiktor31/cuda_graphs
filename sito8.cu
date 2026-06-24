@@ -23,7 +23,7 @@ __global__ void test(char * BUFFOR1,int len,int print_if,int limit) {
   //char * BUFFOR=BUFOR1
 
   if (tid>=limit){
-    if (tid==limit) printf("%d return\n",tid);
+    //if (tid==limit) printf("%d return\n",tid);
     return;
   } 
 
