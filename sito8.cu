@@ -256,6 +256,7 @@ int main(int argc, char *argv[])
       printf("czas dla 1024 blokow z jednym watkiem = %f \n",full_time4 );
       printf("czas dla 32 blokow z 32 watkami = %f \n",full_time5 );
       printf("czas dla 256 blokow z 256 watkami = %f \n",full_time3 );
+      printf("czas dla ladowania = %f \n",full_time_help );
       now=now*2;
       }
     }
