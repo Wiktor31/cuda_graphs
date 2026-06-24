@@ -323,7 +323,7 @@ int main(int argc, char *argv[])
     if (iter>=now)
       {
       printf("dla %d * %d\n",blokow*watkow,iter);
-      printf("czas dla %d blokow i %d watkow = %f \n",blokow,watkowfull_time1 );
+      printf("czas dla %d blokow i %d watkow = %f \n",blokow,watkow,full_time1 );
       printf("czas dla ladowania = %f \n",full_time_help );
       
       now=now*2;
@@ -343,7 +343,7 @@ int main(int argc, char *argv[])
     iter+=1;
   }
   printf("dla %d * %d\n",blokow*watkow,iter);
-  printf("czas dla %d blokow i %d watkow = %f \n",blokow,watkowfull_time1 );
+  printf("czas dla %d blokow i %d watkow = %f \n",blokow,watkow,full_time1 );
   printf("czas dla ladowania = %f \n",full_time_help );
   
   cudaFree(cuda_bufor);
