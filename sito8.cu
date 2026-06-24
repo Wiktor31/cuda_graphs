@@ -307,11 +307,11 @@ int main(int argc, char *argv[])
   if (argc>4) {show_1=strtol(argv[4],NULL,10);}  
   if (argc>5) {file = argv[5];}  
   FILE *file_log = fopen(file,"w");
-  fprintf(file_log,"1234\n");
   if(file_log==NULL){
     printf("Error file");
     return 1;
   }
+  fprintf(file_log,"1234\n");
 
  
   int i = 0,j=0,len;
