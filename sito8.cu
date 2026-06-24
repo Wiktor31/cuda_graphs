@@ -310,7 +310,7 @@ int main(int argc, char *argv[])
   fprintf(file_log,"1234");
   if(file_log==NULL){
     printf("Error file");
-    return:
+    return 1:
   }
 
  
