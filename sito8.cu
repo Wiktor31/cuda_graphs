@@ -338,7 +338,7 @@ int main(int argc, char *argv[])
       {
         start = omp_get_wtime();
         for (int i1 = 0; i1 < 1024; i1++) {
-          test_omp(BUFFOR1,len,i);
+          test_omp(BUFFOR1,len,i1);
         }
         fin = omp_get_wtime();
         full_time_omp0 = fin - start;
@@ -346,7 +346,7 @@ int main(int argc, char *argv[])
         start = omp_get_wtime();
         #pragma omp parallel for  schedule(static)
         for (int i1 = 0; i1 < 1024; i1++) {
-          test_omp(BUFFOR1,len,i);
+          test_omp(BUFFOR1,len,i1);
         }
         fin = omp_get_wtime();
         full_time_omp1 = fin - start;
@@ -354,7 +354,7 @@ int main(int argc, char *argv[])
         start = omp_get_wtime(); 
         #pragma omp parallel for  schedule(dynamic)
         for (int i1 = 0; i1 < 1024; i1++) {
-          test_omp(BUFFOR1,len,i);
+          test_omp(BUFFOR1,len,i1);
         }
         fin = omp_get_wtime();
         full_time_omp2 = fin - start;
@@ -449,7 +449,7 @@ int main(int argc, char *argv[])
     {
       start = omp_get_wtime();
       for (int i1 = 0; i1 < i; i1++) {
-        test_omp(BUFFOR1,len,i);
+        test_omp(BUFFOR1,len,i1);
       }
       fin = omp_get_wtime();
       full_time_omp0 = fin - start;
@@ -457,7 +457,7 @@ int main(int argc, char *argv[])
       start = omp_get_wtime();
       #pragma omp parallel for  schedule(static)
       for (int i1 = 0; i1 < i; i1++) {
-        test_omp(BUFFOR1,len,i);
+        test_omp(BUFFOR1,len,i1);
       }
       fin = omp_get_wtime();
       full_time_omp1 = fin - start;
@@ -465,7 +465,7 @@ int main(int argc, char *argv[])
       start = omp_get_wtime(); 
       #pragma omp parallel for  schedule(dynamic)
       for (int i1 = 0; i1 < i; i1++) {
-        test_omp(BUFFOR1,len,i);
+        test_omp(BUFFOR1,len,i1);
       }
       fin = omp_get_wtime();
       full_time_omp2 = fin - start;
