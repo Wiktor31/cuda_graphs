@@ -184,8 +184,11 @@ int main(int argc, char *argv[])
   cudaMalloc((void**)&cuda_bufor1,BUFSIZE);
   cudaMalloc((void**)&cuda_bufor2,BUFSIZE2);
   int k=0,iter=0,now=1;
-  double start, fin,full_time1=0.0,full_time2=0.0,full_time3=0.0,full_time4=0.0,full_time5=0.0;
+  double start, fin,full_time1=0.0,full_time2=0.0,full_time3=0.0,full_time4=0.0,full_time5=0.0,full_time_help=0.0;
+  start = omp_get_wtime();
   while (fgets(BUFFOR,BUFSIZE-1,stdin)) {
+  fin = omp_get_wtime();
+  full_time_help+=fin-start;
     //printf("%d\n",i);
     len = strlen(BUFFOR);
     for (int j1 = 0;j1<len-1;j1++){
@@ -257,7 +260,11 @@ int main(int argc, char *argv[])
       }
     }
  
+  start = omp_get_wtime();
   } // while
+
+  fin = omp_get_wtime();
+  full_time_help+=fin-start;
   start = omp_get_wtime();
   cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice);
   test<<<1,i>>>(cuda_bufor,len,0,i);
@@ -295,6 +302,7 @@ int main(int argc, char *argv[])
   printf("czas dla 1024 blokow z jednym watkiem = %f \n",full_time4 );
   printf("czas dla 32 blokow z 32 watkami = %f \n",full_time5 );
   printf("czas dla 256 blokow z 256 watkami = %f \n",full_time3 );
+  printf("czas dla ladowania = %f \n",full_time_help );
   cudaFree(cuda_bufor);
   cudaFree(cuda_bufor1);
   return EXIT_SUCCESS;
