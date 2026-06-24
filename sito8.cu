@@ -28,7 +28,6 @@ __global__ void test(char * BUFFOR1,int len,int print_if,int limit) {
   } 
 
   char *BUFFOR = BUFFOR1 + tid * len;
-  printf("%s\n",BUFFOR);
   
  
   //printf("%d,%s\n",tid,BUFFOR);
