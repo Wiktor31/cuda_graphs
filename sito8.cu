@@ -283,24 +283,19 @@ int main(int argc, char *argv[])
 {
  
   char BUFFOR[BUFSIZE];
-  char BUFFOR1[BUFSIZE1];
   char BUFFOR2[BUFSIZE2];
  
   char * cuda_bufor;
-  char * cuda_bufor1;
-  char * cuda_bufor2;
   int print_if = 1,omp_use=1; 
-  int active = 1;
+  int active = 1,blakow=1,watkow=1;
   if (argc>1) {print_if=strtol(argv[1],NULL,10);}  
-  if (argc>2) {active=strtol(argv[2],NULL,10);}  
-  if (argc>3) {omp_use=strtol(argv[3],NULL,10);}  
+  if (argc>2) {blokow=strtol(argv[2],NULL,10);}  
+  if (argc>3) {watkow=strtol(argv[3],NULL,10);}  
  
   int i = 0,j=0,len;
-  cudaMalloc((void**)&cuda_bufor,BUFSIZE1);
-  cudaMalloc((void**)&cuda_bufor1,BUFSIZE);
-  cudaMalloc((void**)&cuda_bufor2,BUFSIZE2);
+  cudaMalloc((void**)&cuda_bufor,BUFSIZE2);
   int k=0,iter=0,now=1;
-  double start, fin,full_time1=0.0,full_time2=0.0,full_time3=0.0,full_time4=0.0,full_time5=0.0,full_time_help=0.0,full_time_omp0=0.0,full_time_omp1=0.0,full_time_omp2=0.0;
+  double start, fin,full_time1=0.0;
   start = omp_get_wtime();
   while (fgets(BUFFOR,BUFSIZE-1,stdin)) {
   fin = omp_get_wtime();
@@ -308,183 +303,49 @@ int main(int argc, char *argv[])
     //printf("%d\n",i);
     len = strlen(BUFFOR);
     for (int j1 = 0;j1<len-1;j1++){
-      BUFFOR1[i*len+j1]=BUFFOR[j1];
-      BUFFOR2[j*len+j1]=BUFFOR[j1];
+      BUFFOR2[i*len+j1]=BUFFOR[i1];
     }
-    BUFFOR1[i*len+len-1]='\0';
-    BUFFOR2[j*len+len-1]='\0';
+    BUFFOR2[i*len+len-1]='\0';
     i+=1;
-    j+=1;
      // if (eigensymmatrix(BUFFOR)) 
     //printf("Main:%s",BUFFOR);
 	  //BUFFOR[glen]='\0';
-    if (active==1){
-    start = omp_get_wtime();
-    cudaMemcpy(cuda_bufor1,BUFFOR,BUFSIZE,cudaMemcpyHostToDevice);
-    test<<<1,1>>>(cuda_bufor1,len,0,1);
-    cudaDeviceSynchronize();	
-    fin = omp_get_wtime();
-    full_time1+=fin-start;
-    }
-    if (i==1024){
+    if (i==blokow*watkow){
       start = omp_get_wtime();
-      cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice);
-      test<<<1,1024>>>(cuda_bufor,len,0,1024);
+      cudaMemcpy(cuda_bufor,BUFFOR,BUFSIZE,cudaMemcpyHostToDevice);
+      test<<<blokow,watkow>>>(cuda_bufor,len,print_if,i);
       cudaDeviceSynchronize();	
       fin = omp_get_wtime();
-      full_time2+=fin-start;
-      if (omp_use==1)
-      {
-        start = omp_get_wtime();
-        for (int i1 = 0; i1 < 1024; i1++) {
-          test_omp(BUFFOR1,len,i1);
-        }
-        fin = omp_get_wtime();
-        full_time_omp0 += fin - start;
-
-        start = omp_get_wtime();
-        #pragma omp parallel for  schedule(static)
-        for (int i1 = 0; i1 < 1024; i1++) {
-          test_omp(BUFFOR1,len,i1);
-        }
-        fin = omp_get_wtime();
-        full_time_omp1 += fin - start;
-
-        start = omp_get_wtime(); 
-        #pragma omp parallel for  schedule(dynamic)
-        for (int i1 = 0; i1 < 1024; i1++) {
-          test_omp(BUFFOR1,len,i1);
-        }
-        fin = omp_get_wtime();
-        full_time_omp2 += fin - start;
-      }
-      
-
-
-      start = omp_get_wtime();
-      cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice);
-      test<<<1024,1>>>(cuda_bufor,len,0,1024);
-      cudaDeviceSynchronize();	
-      fin = omp_get_wtime();
-      full_time4+=fin-start;
-
-      start = omp_get_wtime();
-      cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice);
-      test<<<32,32>>>(cuda_bufor,len,0,1024);
-      cudaDeviceSynchronize();	
-      fin = omp_get_wtime();
-      full_time5+=fin-start;
+      full_time1+=fin-start;
       i=0;
-    }
-    if (j==66564){
-      start = omp_get_wtime();
-      cudaMemcpy(cuda_bufor2,BUFFOR2,BUFSIZE2,cudaMemcpyHostToDevice);
-      test<<<256,256>>>(cuda_bufor2,len,print_if,66564);
-      cudaDeviceSynchronize();	
-      fin = omp_get_wtime();
-      full_time3+=fin-start;
-      j=0;
-      k+=1;
-
-
       iter+=1;
-      if (iter>=now)
+    }
+    if (iter>=now)
       {
-      printf("dla 66564 * %d\n",iter);
-
-      if (active==1)
-      printf("czas dla pojedynczych watkow = %f \n",full_time1 );
-      printf("czas dla 1024 watkow = %f \n",full_time2 );
-      printf("czas dla 1024 blokow z jednym watkiem = %f \n",full_time4 );
-      printf("czas dla 32 blokow z 32 watkami = %f \n",full_time5 );
-      printf("czas dla 256 blokow z 256 watkami = %f \n",full_time3 );
+      printf("dla %d * %d\n",blokow*watkow,iter);
+      printf("czas dla %d blokow i %d watkow = %f \n",blokow,watkowfull_time1 );
       printf("czas dla ladowania = %f \n",full_time_help );
-      if(omp_use==1)
-      {
-        printf("czas sekw omp = %f \n",full_time_omp0 );
-        printf("czas omp static = %f \n",full_time_omp1 );
-        printf("czas omp dynamic = %f \n",full_time_omp2 );
-
-      }
+      
       now=now*2;
       }
-    }
+    
  
   start = omp_get_wtime();
   } // while
-
-  fin = omp_get_wtime();
-  full_time_help+=fin-start;
-  start = omp_get_wtime();
-  cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice);
-  test<<<1,i>>>(cuda_bufor,len,0,i);
-  cudaDeviceSynchronize();	
-  fin = omp_get_wtime();
-  full_time2+=fin-start;
-  
-  start = omp_get_wtime();
-  cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice);
-  test<<<i,1>>>(cuda_bufor,len,0,i);
-  cudaDeviceSynchronize();	
-  fin = omp_get_wtime();
-  full_time4+=fin-start;
-
-  start = omp_get_wtime();
-  cudaMemcpy(cuda_bufor,BUFFOR1,BUFSIZE1,cudaMemcpyHostToDevice);
-  test<<<32,32>>>(cuda_bufor,len,0,i);
-  cudaDeviceSynchronize();	
-  fin = omp_get_wtime();
-  full_time5+=fin-start;
-
-  start = omp_get_wtime();
-  cudaMemcpy(cuda_bufor2,BUFFOR2,BUFSIZE2,cudaMemcpyHostToDevice);
-  test<<<256,256>>>(cuda_bufor2,len,print_if,j);
-  cudaDeviceSynchronize();	
-  fin = omp_get_wtime();
-  full_time3+=fin-start;
-  j=0;
-  k+=1;
-  if (omp_use==1)
-    {
-      start = omp_get_wtime();
-      for (int i1 = 0; i1 < i; i1++) {
-        test_omp(BUFFOR1,len,i1);
-      }
-      fin = omp_get_wtime();
-      full_time_omp0 += fin - start;
-
-      start = omp_get_wtime();
-      #pragma omp parallel for  schedule(static)
-      for (int i1 = 0; i1 < i; i1++) {
-        test_omp(BUFFOR1,len,i1);
-      }
-      fin = omp_get_wtime();
-      full_time_omp1 += fin - start;
-
-      start = omp_get_wtime(); 
-      #pragma omp parallel for  schedule(dynamic)
-      for (int i1 = 0; i1 < i; i1++) {
-        test_omp(BUFFOR1,len,i1);
-      }
-      fin = omp_get_wtime();
-      full_time_omp2 += fin - start;
-    }
-
-  if (active==1)
-  printf("czas dla pojedynczych watkow = %f \n",full_time1 );
-  printf("czas dla 1024 watkow = %f \n",full_time2 );
-  printf("czas dla 1024 blokow z jednym watkiem = %f \n",full_time4 );
-  printf("czas dla 32 blokow z 32 watkami = %f \n",full_time5 );
-  printf("czas dla 256 blokow z 256 watkami = %f \n",full_time3 );
+  if (i==blokow*watkow){
+    start = omp_get_wtime();
+    cudaMemcpy(cuda_bufor1,BUFFOR,BUFSIZE,cudaMemcpyHostToDevice);
+    test<<<blokow,watkow>>>(cuda_bufor1,len,print_if,i);
+    cudaDeviceSynchronize();	
+    fin = omp_get_wtime();
+    full_time1+=fin-start;
+    i=0;
+    iter+=1;
+  }
+  printf("dla %d * %d\n",blokow*watkow,iter);
+  printf("czas dla %d blokow i %d watkow = %f \n",blokow,watkowfull_time1 );
   printf("czas dla ladowania = %f \n",full_time_help );
-  if(omp_use==1)
-    {
-      printf("czas sekw omp = %f \n",full_time_omp0 );
-      printf("czas omp static = %f \n",full_time_omp1 );
-      printf("czas omp dynamic = %f \n",full_time_omp2 );
-
-    }
+  
   cudaFree(cuda_bufor);
-  cudaFree(cuda_bufor1);
   return EXIT_SUCCESS;
 }
