@@ -2,18 +2,31 @@
 @file=sito8.cu
 */
  
+
+
 #include <omp.h>
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
- 
+
+
+
 #define BUFSIZE 2048
 #define BUFSIZE1 32768
 #define BUFSIZE2 32*66564
 #define NMAX 20
  
+
+struct record
+{
+    const char *iteration;
+    const char *name;
+    double time;
+};
+
+
 __global__ void test(char * BUFFOR1,int len,int print_if,int limit) {
   int tid = threadIdx.x+(blockIdx.x*blockDim.x);
     
@@ -285,13 +298,20 @@ int main(int argc, char *argv[])
   char BUFFOR[BUFSIZE];
   char BUFFOR2[BUFSIZE2];
  
-  char * cuda_bufor;
+  char * cuda_bufor,*file;
   int print_if = 1,omp_use=1; 
   int show_1 = 1,blokow=1,watkow=1;
   if (argc>1) {blokow=strtol(argv[1],NULL,10);}  
   if (argc>2) {watkow=strtol(argv[2],NULL,10);}  
   if (argc>3) {print_if=strtol(argv[3],NULL,10);}  
   if (argc>4) {show_1=strtol(argv[4],NULL,10);}  
+  if (argc>5) {file = argv[5];}  
+  File file_log = fopen(file,"w");
+  fprintf(file_log,"1234");
+  if(file_log==NULL){
+    printf("Error file",return);
+  }
+
  
   int i = 0,j=0,len;
   cudaMalloc((void**)&cuda_bufor,BUFSIZE2);
