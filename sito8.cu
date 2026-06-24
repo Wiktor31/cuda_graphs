@@ -295,7 +295,7 @@ int main(int argc, char *argv[])
   int i = 0,j=0,len;
   cudaMalloc((void**)&cuda_bufor,BUFSIZE2);
   int k=0,iter=0,now=1;
-  double start, fin,full_time1=0.0;
+  double start, fin,full_time1=0.0,full_time_help=0.0;
   start = omp_get_wtime();
   while (fgets(BUFFOR,BUFSIZE-1,stdin)) {
   fin = omp_get_wtime();
@@ -303,7 +303,7 @@ int main(int argc, char *argv[])
     //printf("%d\n",i);
     len = strlen(BUFFOR);
     for (int j1 = 0;j1<len-1;j1++){
-      BUFFOR2[i*len+j1]=BUFFOR[i1];
+      BUFFOR2[i*len+j1]=BUFFOR[j1];
     }
     BUFFOR2[i*len+len-1]='\0';
     i+=1;
@@ -335,7 +335,7 @@ int main(int argc, char *argv[])
   if (i==blokow*watkow){
     start = omp_get_wtime();
     cudaMemcpy(cuda_bufor,BUFFOR2,BUFSIZE2,cudaMemcpyHostToDevice);
-    test<<<blokow,watkow>>>(cuda_bufor1,len,print_if,i);
+    test<<<blokow,watkow>>>(cuda_bufor,len,print_if,i);
     cudaDeviceSynchronize();	
     fin = omp_get_wtime();
     full_time1+=fin-start;
