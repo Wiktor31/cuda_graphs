@@ -337,16 +337,16 @@ int main(int argc, char *argv[])
  
   start = omp_get_wtime();
   } // while
-  if (i==blokow*watkow){
-    start = omp_get_wtime();
-    cudaMemcpy(cuda_bufor,BUFFOR2,BUFSIZE2,cudaMemcpyHostToDevice);
-    test<<<blokow,watkow>>>(cuda_bufor,len,print_if,i);
-    cudaDeviceSynchronize();
-    fin = omp_get_wtime();
-    full_time1+=fin-start;
-    i=0;
-    iter+=1;
-  }
+  
+  start = omp_get_wtime();
+  cudaMemcpy(cuda_bufor,BUFFOR2,BUFSIZE2,cudaMemcpyHostToDevice);
+  test<<<blokow,watkow>>>(cuda_bufor,len,print_if,i);
+  cudaDeviceSynchronize();
+  fin = omp_get_wtime();
+  full_time1+=fin-start;
+  i=0;
+  iter+=1;
+
   if(show_1){
 
     printf("dla %d * %d\n",blokow*watkow,iter);
