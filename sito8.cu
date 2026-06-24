@@ -25,7 +25,6 @@ void signalHandler(int sig) {
   {
 
     fprintf(file_log,"]\n");
-    fflush(file_log);
     fclose(file_log);
   }
     _exit(sig);
