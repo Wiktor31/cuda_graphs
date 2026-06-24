@@ -312,7 +312,7 @@ int main(int argc, char *argv[])
     return 1;
   }
 
-  printf(file_log,"[\n");
+  fprintf(file_log,"[\n");
  
   int i = 0,j=0,len;
   cudaMalloc((void**)&cuda_bufor,BUFSIZE2);
@@ -374,7 +374,7 @@ int main(int argc, char *argv[])
     fprintf(file_log,"czas dla ladowania = %f \n",full_time_help );
   }
   
-  printf(file_log,"]\n");
+  fprintf(file_log,"]\n");
   cudaFree(cuda_bufor);
   return EXIT_SUCCESS;
 }
