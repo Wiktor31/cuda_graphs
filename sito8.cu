@@ -23,7 +23,7 @@ __global__ void test(char * BUFFOR1,int len,int print_if,int limit) {
   //char * BUFFOR=BUFOR1
 
   if (tid==limit){
-    //if (tid==limit) printf("%d return\n",tid);
+    if (tid==limit) printf("%d return\n",tid);
     return;
   } 
 
@@ -341,7 +341,7 @@ int main(int argc, char *argv[])
     start = omp_get_wtime();
     cudaMemcpy(cuda_bufor,BUFFOR2,BUFSIZE2,cudaMemcpyHostToDevice);
     test<<<blokow,watkow>>>(cuda_bufor,len,print_if,i);
-    cudaDeviceSynchronize();	
+    cudaDeviceSynchronize()
     fin = omp_get_wtime();
     full_time1+=fin-start;
     i=0;
