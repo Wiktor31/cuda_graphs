@@ -341,7 +341,7 @@ int main(int argc, char *argv[])
     start = omp_get_wtime();
     cudaMemcpy(cuda_bufor,BUFFOR2,BUFSIZE2,cudaMemcpyHostToDevice);
     test<<<blokow,watkow>>>(cuda_bufor,len,print_if,i);
-    cudaDeviceSynchronize()
+    cudaDeviceSynchronize();
     fin = omp_get_wtime();
     full_time1+=fin-start;
     i=0;
