@@ -309,7 +309,8 @@ int main(int argc, char *argv[])
   FILE *file_log = fopen(file,"w");
   fprintf(file_log,"1234");
   if(file_log==NULL){
-    printf("Error file",return);
+    printf("Error file");
+    return:
   }
 
  
