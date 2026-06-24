@@ -346,9 +346,11 @@ int main(int argc, char *argv[])
       {
         if (show_1==1)
         {
-        fprintf(file_log,"dla %d * %d\n",blokow*watkow,iter);
-        fprintf(file_log,"czas dla %d blokow i %d watkow = %f \n",blokow,watkow,full_time1 );
-        fprintf(file_log,"czas dla ladowania = %f \n",full_time_help );
+        fprintf(file_log,"{ \n" );
+        fprintf(file_log,""name": %d * %d,\n",blokow*watkow,iter);
+        fprintf(file_log,""%d blokow i %d watkow" : %f, \n",blokow,watkow,full_time1 );
+        fprintf(file_log,""czas dla ladowania" : %f \n",full_time_help );
+        fprintf(file_log,"} \n" );
 
         }
       
