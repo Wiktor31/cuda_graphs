@@ -311,7 +311,6 @@ int main(int argc, char *argv[])
     printf("Error file");
     return 1;
   }
-  fprintf(file_log,"1234\n");
 
  
   int i = 0,j=0,len;
@@ -346,9 +345,9 @@ int main(int argc, char *argv[])
       {
         if (show_1==1)
         {
-          printf("dla %d * %d\n",blokow*watkow,iter);
-          printf("czas dla %d blokow i %d watkow = %f \n",blokow,watkow,full_time1 );
-          printf("czas dla ladowania = %f \n",full_time_help );
+        fprintf(file_log,"dla %d * %d\n",blokow*watkow,iter);
+        fprintf(file_log,"czas dla %d blokow i %d watkow = %f \n",blokow,watkow,full_time1 );
+        fprintf(file_log,"czas dla ladowania = %f \n",full_time_help );
 
         }
       
@@ -369,10 +368,9 @@ int main(int argc, char *argv[])
   iter+=1;
 
   if(show_1){
-
-    printf("dla %d * %d\n",blokow*watkow,iter);
-    printf("czas dla %d blokow i %d watkow = %f \n",blokow,watkow,full_time1 );
-    printf("czas dla ladowania = %f \n",full_time_help );
+    fprintf(file_log,"dla %d * %d\n",blokow*watkow,iter);
+    fprintf(file_log,"czas dla %d blokow i %d watkow = %f \n",blokow,watkow,full_time1 );
+    fprintf(file_log,"czas dla ladowania = %f \n",full_time_help );
   }
   
   cudaFree(cuda_bufor);
